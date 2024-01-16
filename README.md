@@ -1,6 +1,6 @@
 # Codewords solver
 
-A simple ruby-based allgorithm for solving codewords (AKA [Cypher crosswords](https://en.wikipedia.org/wiki/Crossword#Cipher_crosswords)) puzzles (popular in many newspapers).
+A simple ruby-based allgorithm for solving codewords (AKA [Cypher crosswords](https://en.wikipedia.org/wiki/Crossword#Cipher_crosswords)) - popular in many newspapers.
 
 ## Usage
 
