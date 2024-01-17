@@ -50,3 +50,9 @@ grid = [
 ]
 ```
 **Note that while a codewords puzzle is typically formed into a grid with intersecting words, you do not need to mark such intersections here. A simple array of each of the numbered words will suffice!**
+
+### Please note
+
+A good codewords solver requires a good word list, and this one is far from perfect. If it isn't
+solving a puzzle or it's making a mistake, it's quite likely that it's because there are words
+missing from the list!

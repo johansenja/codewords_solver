@@ -1,4 +1,4 @@
-require_relative "codewords_solver"
+require "codewords_solver"
 
 RSpec.describe CodewordsSolver do
   describe "#solve!" do

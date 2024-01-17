@@ -1,3 +1,9 @@
+PATH
+  remote: .
+  specs:
+    codewords_solver (0.0.1)
+      activesupport (~> 7.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -22,6 +28,7 @@ GEM
       concurrent-ruby (~> 1.0)
     minitest (5.21.1)
     mutex_m (0.2.0)
+    rake (13.1.0)
     rspec (3.12.0)
       rspec-core (~> 3.12.0)
       rspec-expectations (~> 3.12.0)
@@ -43,11 +50,9 @@ PLATFORMS
   arm64-darwin-22
 
 DEPENDENCIES
-  activesupport (~> 7.1)
-  rspec (~> 3.12)
-
-RUBY VERSION
-   ruby 3.2.2p53
+  codewords_solver!
+  rake (~> 13.0)
+  rspec (~> 3.0)
 
 BUNDLED WITH
    2.4.10

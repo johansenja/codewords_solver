@@ -1,9 +1,8 @@
 source "https://rubygems.org"
 
-ruby "3.2.2"
+# Specify your gem's dependencies in quince.gemspec
+gemspec
 
-gem "activesupport", "~> 7.1"
+gem "rake", "~> 13.0"
 
-group :test do
-  gem "rspec", "~> 3.12"
-end
+gem "rspec", "~> 3.0"
