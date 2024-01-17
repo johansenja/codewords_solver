@@ -5,11 +5,13 @@ class CodewordsSolver
     include ActiveSupport::Inflector
 
     def initialize
-      @words = import_words_by_filepath("./word_list.txt")
+      @words = import_words_by_filepath(
+        File.join(__dir__, "..", "..", "word_list.txt")
+      )
     end
 
     def find_by_regexp(regexp)
-      all = @words.filter { |w| w.length > 2 and w.match? regexp }
+      @words.filter { |w| w.length > 2 and w.match? regexp }
     end
 
     private
