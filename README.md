@@ -49,6 +49,12 @@ grid = [
   [22, 21, 17, 4, 15, 7, 17, 17, 19],
 ]
 ```
+
+which is a machine-representation of a real-world grid that looks like this:
+
+![IMG_2891](https://github.com/johansenja/codewords_solver/assets/43235608/27741a76-9a14-4dba-b25c-a59a89fcc51d)
+
+
 **Note that while a codewords puzzle is typically formed into a grid with intersecting words, you do not need to mark such intersections here. A simple array of each of the numbered words will suffice!**
 
 ### Please note
