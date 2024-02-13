@@ -4,15 +4,25 @@ class CodewordsSolver
   class Dictionary
     include ActiveSupport::Inflector
 
+    DEFAULT_FILEPATH = File.join(__dir__, "..", "..", "word_list.txt")
+
     def initialize
-      @words = import_words_by_filepath(
-        File.join(__dir__, "..", "..", "word_list.txt")
-      )
+      load!
     end
 
     def find_by_regexp(regexp)
       @words.filter { |w| w.length > 2 and w.match? regexp }
     end
+
+    def has?(word)
+      @words.include? word
+    end
+
+    def load!
+      @words = import_words_by_filepath(DEFAULT_FILEPATH)
+    end
+
+    alias_method :reload!, :load!
 
     private
 

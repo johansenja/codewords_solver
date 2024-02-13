@@ -1,19 +1,20 @@
-require "codewords_solver/dictionary"
+require_relative "codewords_solver/dictionary"
 
 class CodewordsSolver
-  def self.solve!(coded_words:, starting_letters:)
-    new(coded_words, starting_letters).solve!
+  def self.solve!(coded_words:, starting_letters:, **rest)
+    new(coded_words, starting_letters, **rest).solve!
   end
 
   MAX_LOOP_ATTEMPTS = 5
 
-  def initialize(coded_words, starting_letters)
+  def initialize(coded_words, starting_letters, debug: false)
     @coded_words = coded_words
     @starting_letters = starting_letters
     @letters_by_number = (1..26).to_h { |n| [n, nil] }.merge(
       starting_letters.transform_values(&:upcase)
     )
     @dictionary = Dictionary.new
+    @debug = debug
   end
 
   def solve!
@@ -52,9 +53,11 @@ class CodewordsSolver
       # this is a bit of a leak/hack; at this point, we're going a bit beyond regex's capabilities
       possibilities = filter_invalid_possibilities(possibilities, coded_word)
 
-      # puts(
-      #   "Found #{possibilities.length > 10 ? possibilities.length : possibilities.join(", ")} for #{coded_word} (regexp: /#{regexp}/)"
-      # )
+      if @debug
+        puts(
+          "Found #{possibilities.length > 10 ? possibilities.length : possibilities.join(", ")} for #{coded_word} (regexp: /#{regexp}/)"
+        )
+      end
 
       assign_word(coded_word, possibilities[0]) if possibilities.length == 1
 
@@ -68,6 +71,7 @@ class CodewordsSolver
         end
       end
 
+      try_to_fill_last_letter
       break if complete?
     end
   end
@@ -102,6 +106,21 @@ class CodewordsSolver
     @letters_by_number.each_value.all? { |letter| !letter.nil? }
   end
 
+  # in cases where there is only one letter remaining, but the word that it spells isn't in the
+  # dictionary, then this will put the final piece into place via process of elimination
+  def try_to_fill_last_letter
+    remaining = unassigned_letters
+
+    return unless remaining.length == 1
+
+    @letters_by_number.each do |num, val|
+      next if val
+
+      @letters_by_number[num] = remaining[0]
+      break
+    end
+  end
+
   def filter_invalid_possibilities(possibilities, coded_word)
     possibilities.filter { |poss| poss.chars.uniq.length == coded_word.uniq.length }
   end
@@ -114,9 +133,15 @@ class CodewordsSolver
 
   def print_words
     words = @coded_words.map do |code_word|
-      code_word.each_with_object("") do |number, word|
-        word << @letters_by_number[number]
+      word = code_word.each_with_object("") do |number, str|
+        str << @letters_by_number[number]
       end
+
+      unless @dictionary.has? word
+        puts "!! #{word} not in dictionary - consider adding it to word_list.txt"
+      end
+
+      word
     end
 
     max_word_length = words.max_by(&:length).length
@@ -126,10 +151,12 @@ class CodewordsSolver
     end
   end
 
+  def unassigned_letters
+    ("A".."Z").to_a - @letters_by_number.values.reject(&:nil?)
+  end
+
   def to_regexp(coded_word)
     backreferences_for_unknown_numbers = []
-
-    unassigned_letters = ("A".."Z").to_a.join("").tr @letters_by_number.values.join(""), ""
 
     regexp_chars = coded_word.map do |number|
       letter = @letters_by_number[number]
@@ -139,7 +166,7 @@ class CodewordsSolver
 
       if backreference_num.nil?
         backreferences_for_unknown_numbers << number
-        "(#{unassigned_letters.split("").join("|")})"
+        "(#{unassigned_letters.join("|")})"
       else
         "\\#{backreference_num + 1}"
       end

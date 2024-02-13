@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    codewords_solver (0.0.1)
+    codewords_solver (0.0.3)
       activesupport (~> 7.1)
 
 GEM
